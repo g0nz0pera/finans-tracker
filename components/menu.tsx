@@ -1,31 +1,35 @@
+"use client"
 import React from 'react';
-import {PersonStandingIcon} from "lucide-react";
-import Link from "next/link";
-import {Avatar, AvatarFallback} from "@/components/ui/avatar";
+import {Loader2, LogOut, BadgeDollarSign} from "lucide-react";
 import ThemeSwitcher from "@/components/theme-switcher";
 import MenuItem from "@/components/menu-item";
+import {ClerkLoaded, ClerkLoading, useClerk, UserButton} from "@clerk/nextjs";
+import { Button } from '@/components/ui/button';
 
 const Menu = () => {
+    const { signOut } = useClerk();
+
     return (
         <nav className="bg-muted overflow-auto p-2 flex flex-col">
             <header className="border-b dark:border-b-black border-b-emerald-300 pb-4">
-                <h4 className="flex items-center">
-                    <PersonStandingIcon size={40} className="text-emerald-500"/> Expen$e
-                </h4>
+                <h2 className="flex items-center">
+                    <BadgeDollarSign size={40} className="text-emerald-500 mr-2"/> Finan Tracker
+                </h2>
             </header>
             <ul className="py-4 grow">
                 <MenuItem href="/">Home</MenuItem>
-                <MenuItem href="/expenses">Expenses</MenuItem>
+                <MenuItem href="/transactions">Transactions</MenuItem>
             </ul>
             <footer className="flex gap-2 items-center m-2">
-                <Avatar>
-                    <AvatarFallback className="bg-emerald-300 dark:bg-emerald-800">
-                        GG
-                    </AvatarFallback>
-                </Avatar>
-                <Link className="hover:underline" href="/">
-                    LogOut
-                </Link>
+                <ClerkLoaded>
+                    <UserButton afterSignOutUrl="/"/>
+                </ClerkLoaded>
+                <ClerkLoading>
+                    <Loader2 className="size-8 animate-spin text-slate-500"/>
+                </ClerkLoading>
+                <button onClick={() => signOut({redirectUrl: '/'})}>
+                    <LogOut className="h-5 w-5 ml-2"/>
+                </button>
                 <ThemeSwitcher className="ml-auto"/>
             </footer>
         </nav>

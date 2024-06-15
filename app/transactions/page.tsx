@@ -2,7 +2,9 @@ import React from 'react';
 
 function Page(props) {
     return (
-        <div>LANDING</div>
+        <div>
+            <h1>Transactions</h1>
+        </div>
     );
 }
 
