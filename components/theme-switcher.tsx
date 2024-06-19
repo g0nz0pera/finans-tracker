@@ -1,32 +1,52 @@
-'use client'
+"use client";
 import React from "react";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
-import {MoonIcon, SunIcon} from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Moon, MoonIcon, Sun, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 type ThemeSwitcherProps = {
-    className?: string;
-}
-
-const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className } : ThemeSwitcherProps) => {
-
-    const [isDarkMode, setDarkMode] = React.useState(false)
-
-    return (
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger className={className} onClick={() => {
-                    setDarkMode(prevValue => !prevValue);
-                    document.body.classList.toggle("dark")
-                }}>
-                    {isDarkMode ? <MoonIcon /> : <SunIcon />}
-                </TooltipTrigger>
-                <TooltipContent>
-                    {isDarkMode ? "Enable Light Mode"  : "Enable Dark Mode"}
-                </TooltipContent>
-
-            </Tooltip>
-        </TooltipProvider>
-    );
+  className?: string;
 };
 
-export default ThemeSwitcher
+const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
+  className,
+}: ThemeSwitcherProps) => {
+  const { setTheme } = useTheme();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default ThemeSwitcher;
